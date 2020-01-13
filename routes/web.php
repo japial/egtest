@@ -25,3 +25,12 @@ Route::get('products/{product}', 'ProductController@show');
 Route::post('products', 'ProductController@store');
 Route::post('product-update', 'ProductController@update');
 Route::post('product-delete', 'ProductController@destroy');
+
+//Order Routes
+Route::get('orders', 'OrderController@index')->middleware('admin');
+Route::get('suppliers', 'OrderController@suppliers')->middleware('admin');
+Route::get('get-orders', 'OrderController@getOrders');
+Route::get('orders/{order}', 'OrderController@show');
+Route::post('orders', 'OrderController@store')->middleware('admin');
+Route::post('order-update', 'OrderController@update');
+Route::post('order-delete', 'OrderController@destroy')->middleware('admin');

@@ -2,17 +2,17 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+<div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Products
+                    <span style="font-size: 20px; font-weight: 600;">Products</span>
                     <button class="btn btn-dark float-right" @click="resetProductData()" data-toggle="modal" data-target="#productModal">
                         Add Product
                     </button>
                 </div>
 
-                <div class="card-body h-400-scroll">
+                <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -46,6 +46,8 @@
             </div>
         </div>
     </div>
+    
+    
 </div>
 <!-- Product Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
@@ -53,7 +55,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="productModalLabel" v-if="validString(productName)" v-text="productName"></h5>
-        <h5 class="modal-title" id="productModalLabel">New Product</h5>
+        <h5 class="modal-title" id="productModalLabel" v-else>New Product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

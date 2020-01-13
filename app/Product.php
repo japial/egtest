@@ -16,6 +16,7 @@ class Product extends Model {
                 ->get();
         return $allProducts;
     }
+    
     public function orders() {
         return $this->hasMany(Order::class);
     }

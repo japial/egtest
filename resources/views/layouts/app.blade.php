@@ -30,10 +30,6 @@
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
-            .h-400-scroll{
-                height: 400px;
-                overflow-y: auto;
-            }
         </style>
     </head>
     <body>
@@ -50,7 +46,14 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
-
+@if (Auth::user()->is_admin)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/home') }}">Products</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/orders') }}">Orders</a>
+                                </li>
+                            @endif
                         </ul>
 
                         <!-- Right Side Of Navbar -->

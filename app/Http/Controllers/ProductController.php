@@ -50,7 +50,7 @@ class ProductController extends Controller {
             Product::create($product);
             $data['status'] = 2;
             $data['products'] = Product::allProducts();
-            return $data;
+            return response()->json($data);
         }
     }
 
@@ -73,7 +73,7 @@ class ProductController extends Controller {
             $productData->update();
             $data['status'] = 2;
             $data['products'] = Product::allProducts();
-            return $data;
+            return response()->json($data);
         }
     }
 
@@ -92,7 +92,7 @@ class ProductController extends Controller {
             $product->delete();
             $data['status'] = 2;
         }
-        return $data;
+        return response()->json($data);
     }
 
     private function productValidation($request) {

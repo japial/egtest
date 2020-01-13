@@ -5,7 +5,7 @@ const app = new Vue({
     data() {
         return {
             productData: false,
-            productName: 'New Product',
+            productName: '',
             productPrice: 0,
             productDescription: '',
             productStock: 0,
@@ -37,16 +37,15 @@ const app = new Vue({
                         this.productStock = product.stock;
                     }).catch(error => {
                 console.log(error);
-            }).finally(() => this.productData = true);
+            });
         },
         saveProduct() {
             this.productErrors = [];
+            let reqPath = '/products';
+            let productForm = this.setProductData();
             if (this.productSelected) {
                 reqPath = '/product-update';
                 productForm = this.setProductData(this.productSelected);
-            } else {
-                let reqPath = '/products';
-                let productForm = this.setProductData();
             }
             axios.post(reqPath, productForm).then(response => {
                 let result = response.data;
