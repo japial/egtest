@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Product;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -97,6 +98,16 @@ class OrderController extends Controller {
     public function destroy(Request $request) {
         $order = Order::findOrFail($request->order_id);
         $order->delete();
+        return response()->json(array('status' => 2));
+    }
+
+    public function delivered(Request $request) {
+        $order = Order::findOrFail($request->order_id);
+        $order->is_delivered = 1;
+        $order->update();
+        $product = Product::find($order->product_id);
+        $product->stock = $product->stock + $order->quantity;
+        $product->update();
         return response()->json(array('status' => 2));
     }
 

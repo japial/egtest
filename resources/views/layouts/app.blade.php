@@ -46,14 +46,16 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
-@if (Auth::user()->is_admin)
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/home') }}">Products</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/orders') }}">Orders</a>
-                                </li>
+                            @auth
+                            @if (Auth::user()->is_admin)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/home') }}">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/orders') }}">Orders</a>
+                            </li>
                             @endif
+                            @endauth
                         </ul>
 
                         <!-- Right Side Of Navbar -->
@@ -101,6 +103,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         @stack('scripts')
     </body>
 </html>

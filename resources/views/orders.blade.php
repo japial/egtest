@@ -32,7 +32,7 @@
                                 <td v-text="order.supplier"></td>
                                 <td v-text="order.quantity"></td>
                                 <td>
-                                    <span v-if="order.received" class="badge badge-success">YES</span>
+                                    <span v-if="order.is_delivered" class="badge badge-success">YES</span>
                                     <span v-else class="badge badge-info">NO</span>
                                 </td>
                                 <td>
@@ -97,6 +97,5 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script src="{{ asset('js/order.js') }}"></script>
 @endpush

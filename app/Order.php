@@ -13,15 +13,16 @@ class Order extends Model {
     public static function allOrders() {
         $allOrders = (new static)::join('products', 'products.id', '=', 'orders.product_id')
                         ->join('users', 'users.id', '=', 'orders.user_id')
-                        ->select('orders.id','orders.quantity', 'orders.created_at', 'products.name', 'products.price', 'users.name as supplier')
+                        ->select('orders.id', 'orders.quantity','orders.is_delivered', 'orders.created_at', 'products.name', 'products.price', 'users.name as supplier')
                         ->orderBy('orders.id', 'DESC')->get();
         return $allOrders;
     }
 
     public static function supplierOrders($userID) {
         $allOrders = (new static)::where('orders.user_id', $userID)
+                        ->where('orders.is_delivered', 0)
                         ->join('products', 'products.id', '=', 'orders.product_id')
-                        ->select('orders.id','orders.quantity', 'orders.created_at', 'products.name', 'products.price', 'products.description')
+                        ->select('orders.id', 'orders.quantity', 'orders.created_at', 'products.name', 'products.price', 'products.description')
                         ->orderBy('orders.id', 'DESC')->get();
         return $allOrders;
     }

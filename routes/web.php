@@ -33,4 +33,5 @@ Route::get('get-orders', 'OrderController@getOrders');
 Route::get('orders/{order}', 'OrderController@show');
 Route::post('orders', 'OrderController@store')->middleware('admin');
 Route::post('order-update', 'OrderController@update');
+Route::post('order-delivered', 'OrderController@delivered');
 Route::post('order-delete', 'OrderController@destroy')->middleware('admin');
