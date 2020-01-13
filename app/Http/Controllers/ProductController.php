@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\Product;
+use App\Order;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller {
@@ -21,15 +22,14 @@ class ProductController extends Controller {
         $products = Product::allProducts();
         return response()->json($products);
     }
-    
+
     /**
      * Show the specified resource.
      *
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
-    {
+    public function show(Product $product) {
         return response()->json($product);
     }
 
@@ -83,19 +83,27 @@ class ProductController extends Controller {
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product) {
-        //
+    public function destroy(Request $request) {
+        $product = Product::findOrFail($request->product_id);
+        $order = Order::where('product_id', $product->id)->first();
+        if (isset($order->id)) {
+            $data['status'] = 5;
+        } else {
+            $product->delete();
+            $data['status'] = 2;
+        }
+        return $data;
     }
 
     private function productValidation($request) {
-         $rules = array(
+        $rules = array(
             'name' => 'required',
             'price' => 'required',
             'stock' => 'required|numeric'
         );
         return Validator::make($request->all(), $rules);
     }
-    
+
     private function setProductValues($request, $product = []) {
         $product['name'] = $request->input('name');
         $product['price'] = $request->input('price');

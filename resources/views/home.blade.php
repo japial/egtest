@@ -36,7 +36,7 @@
                                             data-toggle="modal" data-target="#productModal">
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-danger" @click="deleteProduct(index)">Delete</button>
                                 </td>
                             </tr>
                         </tbody>

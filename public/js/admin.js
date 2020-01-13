@@ -28,7 +28,7 @@ const app = new Vue({
         },
         getSingleProduct(productID) {
             this.productSelected = productID;
-            axios.get('/products/'+productID)
+            axios.get('/products/' + productID)
                     .then(response => {
                         let product = response.data;
                         this.productName = product.name;
@@ -41,10 +41,10 @@ const app = new Vue({
         },
         saveProduct() {
             this.productErrors = [];
-            if(this.productSelected){
+            if (this.productSelected) {
                 reqPath = '/product-update';
                 productForm = this.setProductData(this.productSelected);
-            }else{
+            } else {
                 let reqPath = '/products';
                 let productForm = this.setProductData();
             }
@@ -53,7 +53,8 @@ const app = new Vue({
                 if (result.status === 2) {
                     this.products = result.products;
                     this.resetProductData();
-                    $('#productModal').modal("hide");;
+                    $('#productModal').modal("hide");
+                    ;
                     this.showSuccessMessage('Product Saved');
                 } else {
                     this.productErrors = result.errors;
@@ -62,9 +63,40 @@ const app = new Vue({
                 console.log(error);
             });
         },
+        deleteProduct(product_index) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    let product = this.products[product_index];
+                    let dataForm = new FormData();
+                    dataForm.append('product_id', product.id);
+                    axios.post('/product-delete', dataForm)
+                            .then(response => {
+                                let result = response.data;
+                                if (result.status === 2) {
+                                    if (product_index > -1) {
+                                        this.products.splice(product_index, 1);
+                                    }
+                                    this.showSuccessMessage('Product Deleted');
+                                } else {
+                                    this.showErrorMessage("This Product Have Order");
+                                }
+                            }).catch(error => {
+                        console.log(error);
+                    });
+                }
+            });
+        },
         setProductData(productID = 0) {
             let dataForm = new FormData();
-            if(productID){
+            if (productID) {
                 dataForm.append('product_id', productID);
             }
             dataForm.append('name', this.productName);
@@ -87,6 +119,13 @@ const app = new Vue({
                 title: message,
                 showConfirmButton: false,
                 timer: 1500
+            });
+        },
+        showErrorMessage(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sorry!',
+                text: message
             });
         },
         validString(item) {
