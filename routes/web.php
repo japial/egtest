@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Products Routes
-Route::resource('products', 'ProductController')->except([
-    'create', 'show', 'edit'
-]);
+Route::get('products', 'ProductController@index');
+Route::get('products/{product}', 'ProductController@show');
+Route::post('products', 'ProductController@store');
+Route::post('product-update', 'ProductController@update');
+Route::post('product-delete', 'ProductController@destroy');

@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Products
-                    <button class="btn btn-dark float-right" data-toggle="modal" data-target="#productModal">
+                    <button class="btn btn-dark float-right" @click="resetProductData()" data-toggle="modal" data-target="#productModal">
                         Add Product
                     </button>
                 </div>
@@ -32,7 +32,10 @@
                                 <td v-text="product.price"></td>
                                 <td v-text="product.stock"></td>
                                 <td>
-                                    <button class="btn btn-warning">Edit</button>
+                                    <button class="btn btn-warning" @click="getSingleProduct(product.id)"
+                                            data-toggle="modal" data-target="#productModal">
+                                        Edit
+                                    </button>
                                     <button class="btn btn-danger">Delete</button>
                                 </td>
                             </tr>
@@ -49,7 +52,8 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="productModalLabel" v-text="productName"></h5>
+        <h5 class="modal-title" id="productModalLabel" v-if="validString(productName)" v-text="productName"></h5>
+        <h5 class="modal-title" id="productModalLabel">New Product</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

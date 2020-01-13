@@ -21,6 +21,17 @@ class ProductController extends Controller {
         $products = Product::allProducts();
         return response()->json($products);
     }
+    
+    /**
+     * Show the specified resource.
+     *
+     * @param  \App\Product  $product
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Product $product)
+    {
+        return response()->json($product);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -50,8 +61,20 @@ class ProductController extends Controller {
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product) {
-        //
+    public function update(Request $request) {
+        $validator = $this->productValidation($request);
+        if ($validator->fails()) {
+            $data['status'] = 5;
+            $data['errors'] = $validator->errors();
+            return response()->json($data);
+        } else {
+            $product = Product::find($request->product_id);
+            $productData = $this->setProductValues($request, $product);
+            $productData->update();
+            $data['status'] = 2;
+            $data['products'] = Product::allProducts();
+            return $data;
+        }
     }
 
     /**
@@ -72,8 +95,8 @@ class ProductController extends Controller {
         );
         return Validator::make($request->all(), $rules);
     }
-    private function setProductValues($request) {
-        $product = [];
+    
+    private function setProductValues($request, $product = []) {
         $product['name'] = $request->input('name');
         $product['price'] = $request->input('price');
         $product['stock'] = $request->input('stock');

@@ -9,6 +9,7 @@ const app = new Vue({
             productPrice: 0,
             productDescription: '',
             productStock: 0,
+            productSelected: null,
             products: [],
             productErrors: {}
         };
@@ -25,9 +26,29 @@ const app = new Vue({
                 console.log(error);
             }).finally(() => this.productData = true);
         },
+        getSingleProduct(productID) {
+            this.productSelected = productID;
+            axios.get('/products/'+productID)
+                    .then(response => {
+                        let product = response.data;
+                        this.productName = product.name;
+                        this.productPrice = product.price;
+                        this.productDescription = product.description;
+                        this.productStock = product.stock;
+                    }).catch(error => {
+                console.log(error);
+            }).finally(() => this.productData = true);
+        },
         saveProduct() {
             this.productErrors = [];
-            axios.post('/products', this.setProductData()).then(response => {
+            if(this.productSelected){
+                reqPath = '/product-update';
+                productForm = this.setProductData(this.productSelected);
+            }else{
+                let reqPath = '/products';
+                let productForm = this.setProductData();
+            }
+            axios.post(reqPath, productForm).then(response => {
                 let result = response.data;
                 if (result.status === 2) {
                     this.products = result.products;
@@ -41,8 +62,11 @@ const app = new Vue({
                 console.log(error);
             });
         },
-        setProductData() {
+        setProductData(productID = 0) {
             let dataForm = new FormData();
+            if(productID){
+                dataForm.append('product_id', productID);
+            }
             dataForm.append('name', this.productName);
             dataForm.append('price', this.productPrice);
             dataForm.append('stock', this.productStock);
@@ -54,6 +78,7 @@ const app = new Vue({
             this.productPrice = 0;
             this.productStock = 0;
             this.productDescription = '';
+            this.productSelected = null;
         },
         showSuccessMessage(message) {
             Swal.fire({
