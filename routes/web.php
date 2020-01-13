@@ -18,3 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//Products Routes
+Route::resource('products', 'ProductController')->except([
+    'create', 'show', 'edit'
+]);

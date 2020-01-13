@@ -2,29 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
+
+    public function __construct() {
+        $this->middleware('admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function index() {
+        $products = Product::allProducts();
+        return response()->json($products);
     }
 
     /**
@@ -33,31 +28,19 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
+    public function store(Request $request) {
+        $validator = $this->productValidation($request);
+        if ($validator->fails()) {
+            $data['status'] = 5;
+            $data['errors'] = $validator->errors();
+            return response()->json($data);
+        } else {
+            $product = $this->setProductValues($request);
+            Product::create($product);
+            $data['status'] = 2;
+            $data['products'] = Product::allProducts();
+            return $data;
+        }
     }
 
     /**
@@ -67,8 +50,7 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
-    {
+    public function update(Request $request, Product $product) {
         //
     }
 
@@ -78,8 +60,25 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
-    {
+    public function destroy(Product $product) {
         //
     }
+
+    private function productValidation($request) {
+         $rules = array(
+            'name' => 'required',
+            'price' => 'required',
+            'stock' => 'required|numeric'
+        );
+        return Validator::make($request->all(), $rules);
+    }
+    private function setProductValues($request) {
+        $product = [];
+        $product['name'] = $request->input('name');
+        $product['price'] = $request->input('price');
+        $product['stock'] = $request->input('stock');
+        $product['description'] = $request->input('description');
+        return $product;
+    }
+
 }
